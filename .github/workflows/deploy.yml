@@ -21,6 +21,8 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         passphrase: ${{ secrets.SERVER_SSH_KEY_PASSPHRASE }}
         script: |
-          cd /root/app && git pull
+          cd /root/app
+          git pull
+          fuser -k 4000/tcp || true
           npm i
           npm start
