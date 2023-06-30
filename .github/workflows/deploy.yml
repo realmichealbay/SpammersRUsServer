@@ -20,10 +20,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         passphrase: ${{ secrets.SERVER_SSH_KEY_PASSPHRASE }}
-        script: "cd /root/app && git pull"
-    
-    - name: install dependencies
-      run: npm i
-
-    - name: Start App.js
-      run: node .
+        script: |
+          cd /root/app && git pull
+          npm i
+          node .
