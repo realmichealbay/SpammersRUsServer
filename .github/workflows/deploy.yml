@@ -20,4 +20,4 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         passphrase: ${{ secrets.SERVER_SSH_KEY_PASSPHRASE }}
-        script: "cd /app && git pull"
+        script: "cd /root/app && git pull"
