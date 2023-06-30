@@ -23,4 +23,4 @@ jobs:
         script: |
           cd /root/app && git pull
           npm i
-          node .
+          npm start
