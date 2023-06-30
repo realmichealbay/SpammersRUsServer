@@ -25,4 +25,3 @@ jobs:
           git pull
           fuser -k 4000/tcp || true
           npm i
-          pm2 restart app.js || pm2 start app.js
