@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   bodyParser.json(),
-  cors({ origin: "https://spammersrus.com", origin: "http://127.0.0.1:5500" }),
+  cors({ origin: "https://spammersrus.com" }),
   helmet()
 );
 
