@@ -18,7 +18,7 @@ app.use(
 );
 
 app.post(
-  "/test",
+  "/Code-Submit",
   [check("type").isString(), check("code").isString()],
   (req, res) => {
     const errors = validationResult(req);
