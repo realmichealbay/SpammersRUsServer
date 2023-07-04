@@ -1,11 +1,4 @@
-FROM puppeteer/puppeteer:latest
-
-# Update the system and install required libraries
-RUN apt-get update && apt-get install -y \
-    libxss1 \
-    libgbm1 \
-    libatk-bridge2.0-0 \
-    libnss3
+FROM ghcr.io/puppeteer/puppeteer:latest
 
 # Change working directory
 WORKDIR /usr/src/app
