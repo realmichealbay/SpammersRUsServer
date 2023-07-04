@@ -30,11 +30,7 @@ function createCheckURL(page, browser) {
 }
 
 async function start(PIN, NAME, GUESS) {
-
-  const browser = await puppeteer.connect({
-    browserWSEndpoint:
-      "wss://chrome.browserless.io?token=d5f0dd27-5e7c-49b5-9143-91646742b01a",
-  });
+  const browser = await puppeteer.launch({headless: false});
 
   const page = await browser.newPage();
 
@@ -123,7 +119,10 @@ async function start(PIN, NAME, GUESS) {
         var answerButtons = await page.$$(
           '[data-functional-selector^="answer-"]'
         );
+        console.log("total answers = "+answerButtons.length)
+
         let answer = Math.floor(Math.random() * answerButtons.length);
+
         console.log(NAME + "s guess is " + answer);
 
         const answerButton = await page.$(
@@ -136,6 +135,9 @@ async function start(PIN, NAME, GUESS) {
     }
   }
 }
+
+
+
 async function get_question_number(page) {
   //gets the number of questions
   var questionCounterText = await page.$eval(
@@ -152,11 +154,11 @@ async function get_question_number(page) {
 }
 
 
-//(async () => {
+module.exports.startKahoot = async function(code, playerName, guessing) {
   for (let index = 0; index < AmountOfBots; index++) {
     let tempPlayerName = "";
     tempPlayerName = playerArray[index];
-    start(code, tempPlayerName, Guessing);
-    wait(2000);
+    await start(code, tempPlayerName, guessing);
+    await wait(2000);
   }
-//})();
+}

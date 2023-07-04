@@ -4,8 +4,9 @@ const https = require("https");
 const fs = require("fs");
 const cors = require("cors");
 const helmet = require("helmet");
-
 const { check, validationResult } = require("express-validator");
+
+const kahoot = require("/Scrapers/Kahoot.js");
 
 //testing github actions/
 
@@ -31,10 +32,13 @@ app.post(
     console.log("Type Recieved " + req.body.type);
     console.log("Code Recieved " + req.body.code);
     res.status(200).json({
-      message: '200 Data Received',
-      body: req.body
+      message: "200 Data Received",
+      body: req.body,
     });
-    
+
+    if (req.body.type === "Kahoot") {
+      kahoot.startKahoot(req.body.code, "thug", true); // replace "PlayerName" and true with appropriate values
+    }
   }
 );
 
