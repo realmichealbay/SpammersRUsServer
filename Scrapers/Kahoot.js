@@ -30,8 +30,11 @@ function createCheckURL(page, browser) {
 }
 
 async function start(PIN, NAME, GUESS) {
-  const browser = await puppeteer.launch({headless: false});
-
+  const browser = await puppeteer.launch({
+    headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+  
   const page = await browser.newPage();
 
   setInterval(createCheckURL(page, browser), 1000);
