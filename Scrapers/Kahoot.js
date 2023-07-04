@@ -1,7 +1,20 @@
 const puppeteer = require("puppeteer");
 const playerArray = [];
-
 const Guessing = true;
+
+process.on('exit', cleanupFunction);
+process.on('SIGINT', cleanupFunction);
+process.on('SIGTERM', cleanupFunction);
+
+
+function cleanupFunction() {
+  // Close Puppeteer
+  browser.close();
+  // Remove listeners
+  process.removeListener('exit', cleanupFunction);
+  process.removeListener('SIGINT', cleanupFunction);
+  process.removeListener('SIGTERM', cleanupFunction);
+}
 //const TwoFA = true;
 
 function wait(ms) {
