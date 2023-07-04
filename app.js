@@ -25,9 +25,7 @@ app.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    console.log("Type Recieved " + req.body.type);
-    console.log("Code Recieved " + req.body.code);
+    console.log(req.body);
     res.status(200).json({
       message: "200 Data Received",
       body: req.body,
