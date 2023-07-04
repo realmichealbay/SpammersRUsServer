@@ -1,21 +1,12 @@
 const puppeteer = require("puppeteer");
-const code = "";
 const playerArray = [];
 const AmountOfBots = 1;
-const Name = "";
+
 const Guessing = true;
 //const TwoFA = true;
 
-if (Name.length >= 13) {
-  throw new error("Name has to be lower than 12");
-}
-
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-for (var index = 0; index != AmountOfBots; index++) {
-  playerArray.push(Name + index);
 }
 
 function createCheckURL(page, browser) {
@@ -31,10 +22,10 @@ function createCheckURL(page, browser) {
 
 async function start(PIN, NAME, GUESS) {
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
-  
+
   const page = await browser.newPage();
 
   setInterval(createCheckURL(page, browser), 1000);
@@ -122,7 +113,7 @@ async function start(PIN, NAME, GUESS) {
         var answerButtons = await page.$$(
           '[data-functional-selector^="answer-"]'
         );
-        console.log("total answers = "+answerButtons.length)
+        console.log("total answers = " + answerButtons.length);
 
         let answer = Math.floor(Math.random() * answerButtons.length);
 
@@ -139,8 +130,6 @@ async function start(PIN, NAME, GUESS) {
   }
 }
 
-
-
 async function get_question_number(page) {
   //gets the number of questions
   var questionCounterText = await page.$eval(
@@ -156,12 +145,18 @@ async function get_question_number(page) {
   return [currentQuestion, totalQuestions];
 }
 
-
-module.exports.startKahoot = async function(code, playerName, guessing) {
+module.exports.startKahoot = async function (code, playerName, guessing) {
+  const Name = playerName;
+  if (Name.length >= 13) {
+    throw new error("Name has to be lower than 12");
+  }
+  for (var index = 0; index != AmountOfBots; index++) {
+    playerArray.push(Name + index);
+  }
   for (let index = 0; index < AmountOfBots; index++) {
     let tempPlayerName = "";
     tempPlayerName = playerArray[index];
     await start(code, tempPlayerName, guessing);
     await wait(2000);
   }
-}
+};
