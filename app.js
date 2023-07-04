@@ -6,10 +6,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const { check, validationResult } = require("express-validator");
 
-const kahoot = require("/Scrapers/Kahoot.js");
-
-//testing github actions/
-
+const kahoot = require("./Scrapers/Kahoot.js");
 const app = express();
 
 app.use(
