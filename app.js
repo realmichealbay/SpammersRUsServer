@@ -42,8 +42,8 @@ app.post(
 const PORT = process.env.PORT || 4000;
 
 const options = {
-  cert: fs.readFileSync("../certs/fullchain.pem"),
-  key: fs.readFileSync("../certs/privkey.pem"),
+  cert: fs.readFileSync("./certs/fullchain.pem"),
+  key: fs.readFileSync("./certs/privkey.pem"),
 };
 
 https.createServer(options, app).listen(PORT, () => {

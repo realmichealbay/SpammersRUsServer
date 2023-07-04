@@ -25,3 +25,4 @@ jobs:
           git pull
           fuser -k 4000/tcp || true
           npm i
+          cp -r /certs /app/
