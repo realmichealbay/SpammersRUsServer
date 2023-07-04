@@ -1,7 +1,7 @@
 const { text } = require("body-parser");
 const puppeteer = require("puppeteer");
 const playerArray = [];
-const AmountOfBots = 1;
+
 
 const Guessing = true;
 //const TwoFA = true;
@@ -129,8 +129,6 @@ async function start(PIN, NAME, GUESS) {
         var answerButtons = await page.$$(
           '[data-functional-selector^="answer-"]'
         );
-        console.log("total answers = " + answerButtons.length);
-
         let answer = Math.floor(Math.random() * answerButtons.length);
 
         console.log(NAME + "s guess is " + answer);
@@ -161,7 +159,7 @@ async function get_question_number(page) {
   return [currentQuestion, totalQuestions];
 }
 
-module.exports.startKahoot = async function (code, playerName, guessing) {
+module.exports.startKahoot = async function (code, playerName, guessing, AmountOfBots) {
   const Name = playerName;
   if (Name.length >= 13) {
     throw new error("Name has to be lower than 12");
@@ -177,5 +175,4 @@ module.exports.startKahoot = async function (code, playerName, guessing) {
     await start(code, tempPlayerName, guessing);
     await wait(2000);
   }
-  console.log(code, tempPlayerName, guessing);
 };

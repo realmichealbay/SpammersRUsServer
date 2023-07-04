@@ -1,0 +1,4 @@
+has to be in /app directory
+docker build -t my-puppeteer-app .
+docker run -it -p 4000:4000 --rm --cap-add=SYS_ADMIN my-puppeteer-app
+
