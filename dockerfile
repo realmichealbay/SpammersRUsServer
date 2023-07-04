@@ -1,22 +1,26 @@
-# Use an official Node runtime as the base image
-FROM node:latest
+FROM puppeteer/puppeteer:latest
 
-# Set the working directory in the Docker image
+# Update the system and install required libraries
+RUN apt-get update && apt-get install -y \
+    libxss1 \
+    libgbm1 \
+    libatk-bridge2.0-0 \
+    libnss3
+
+# Change working directory
 WORKDIR /usr/src/app
 
-# Install application dependencies
-# A wildcard is used to ensure both package.json and package-lock.json are copied
-# where available
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install any needed packages specified in package.json
+# Install dependencies
 RUN npm install
 
-# Bundle app source inside Docker image
+# Copy all files
 COPY . .
 
-# The app is run by launching the server.js file
-CMD [ "node", "app.js" ]
-
-# Expose the port the app runs on
+# Expose the port the app runs in
 EXPOSE 4000
+
+# Start the application
+CMD [ "npm", "start" ]
