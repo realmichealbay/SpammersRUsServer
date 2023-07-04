@@ -30,7 +30,11 @@ app.post(
 
     console.log("Type Recieved " + req.body.type);
     console.log("Code Recieved " + req.body.code);
-    res.status(200).send("200 Data Received" + req.body);
+    res.status(200).json({
+      message: '200 Data Received',
+      body: req.body
+    });
+    
   }
 );
 
