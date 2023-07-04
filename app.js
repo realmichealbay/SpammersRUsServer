@@ -14,7 +14,7 @@ const app = express();
 app.use(
   bodyParser.json(),
   cors({
-    origin: ["https://spammersrus.com", "http://127.0.0.1"],
+    origin: ["https://spammersrus.com", "http://127.0.0.1:5500"],
   }),
   helmet()
 );
