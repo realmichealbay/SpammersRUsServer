@@ -1,3 +1,4 @@
+const { text } = require("body-parser");
 const puppeteer = require("puppeteer");
 const playerArray = [];
 const AmountOfBots = 1;
@@ -23,16 +24,26 @@ function createCheckURL(page, browser) {
 async function start(PIN, NAME, GUESS) {
   const browser = await puppeteer.launch({
     headless: "new",
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [/*'--no-sandbox', */ "--disable-setuid-sandbox"],
+    //defaultViewport: null,
   });
 
   const page = await browser.newPage();
+  await page.setRequestInterception(true);
+
+  page.on('request', (request) => {
+    if (['font', 'stylesheet'].includes(request.resourceType())) {
+        request.abort();
+    } else {
+        request.continue();
+    }
+});
 
   setInterval(createCheckURL(page, browser), 1000);
   await page.goto("https://kahoot.it/");
   //type code
   try {
-    await page.waitForSelector("#game-input");
+    await page.waitForSelector("#game-input", { timeout: 60000 }); // waits for 60 seconds
     const gameInput = await page.$("#game-input");
     if (gameInput) {
       await gameInput.type(PIN);
@@ -53,45 +64,51 @@ async function start(PIN, NAME, GUESS) {
 
   try {
     await page.waitForNavigation();
-    await page.click("#nickname");
+
+    // Wait for nickname input to be visible
+    await page.waitForSelector("#nickname", { visible: true });
+
+    // Type the nickname
     await page.type("#nickname", NAME);
+
+    // Click the button
+    await page.click("button");
+
+    // Check for an error message
     try {
-      try {
-        await page.click("button");
-      } catch (error) {
-        console.error("failed");
-        console.log(error);
-      }
       await page.waitForSelector(
         'div[data-functional-selector="notification-bar-error"]',
         { timeout: 5000 }
       );
-
       const errorMessage = await page.$eval(
         'div[data-functional-selector="notification-bar-text"]',
         (el) => el.textContent
       );
 
+      // If nickname is taken, change it and retry
       if (errorMessage === "Sorry, that nickname is taken.") {
-        await page.$eval("#nickname", (el) => (el.value = ""));
         let alt_Nickname = NAME + "-";
+
+        // Clear the existing value
+        await page.evaluate(
+          () => (document.querySelector("#nickname").value = "")
+        );
+
+        // Type the alternate nickname
         await page.type("#nickname", alt_Nickname);
-        console.debug("Nickname Typed " + alt_Nickname);
-        try {
-          await page.click("button");
-        } catch (error) {
-          console.error("failed");
-          console.log(error);
-        }
+
+        // Click the button
+        await page.click("button");
       } else {
         console.log("An error occurred: " + errorMessage);
       }
     } catch (error) {
-      console.log(error);
+      // We are just ignoring the timeout error here because it is expected
     }
   } catch (error) {
     console.log(error);
   }
+
   // clicking
   try {
     await page.click("button");
@@ -100,8 +117,7 @@ async function start(PIN, NAME, GUESS) {
     console.log(error);
   }
   console.debug("Nickname Typed " + NAME);
-  await page.waitForNavigation({ timeout: 0 });
-
+  await page.waitForNavigation({ timeout: 600000 });
   if (GUESS == true) {
     await page.waitForNavigation();
     var currentQuestion = 0;
@@ -150,13 +166,16 @@ module.exports.startKahoot = async function (code, playerName, guessing) {
   if (Name.length >= 13) {
     throw new error("Name has to be lower than 12");
   }
+
   for (var index = 0; index != AmountOfBots; index++) {
     playerArray.push(Name + index);
   }
+
   for (let index = 0; index < AmountOfBots; index++) {
     let tempPlayerName = "";
     tempPlayerName = playerArray[index];
     await start(code, tempPlayerName, guessing);
     await wait(2000);
   }
+  console.log(code, tempPlayerName, guessing);
 };
