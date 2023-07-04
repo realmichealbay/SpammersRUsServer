@@ -1,7 +1,5 @@
-const { text } = require("body-parser");
 const puppeteer = require("puppeteer");
 const playerArray = [];
-
 
 const Guessing = true;
 //const TwoFA = true;
@@ -27,17 +25,17 @@ async function start(PIN, NAME, GUESS) {
     args: [/*'--no-sandbox', */ "--disable-setuid-sandbox"],
     //defaultViewport: null,
   });
-
-  const page = await browser.newPage();
+  const context = await browser.createIncognitoBrowserContext();
+  const page = await context.newPage();
   await page.setRequestInterception(true);
 
-  page.on('request', (request) => {
-    if (['font', 'stylesheet'].includes(request.resourceType())) {
-        request.abort();
+  page.on("request", (request) => {
+    if (["font", "stylesheet"].includes(request.resourceType())) {
+      request.abort();
     } else {
-        request.continue();
+      request.continue();
     }
-});
+  });
 
   setInterval(createCheckURL(page, browser), 1000);
   await page.goto("https://kahoot.it/");
@@ -159,20 +157,23 @@ async function get_question_number(page) {
   return [currentQuestion, totalQuestions];
 }
 
-module.exports.startKahoot = async function (code, playerName, guessing, AmountOfBots) {
+module.exports.startKahoot = async function (
+  code,
+  playerName,
+  guessing,
+  AmountOfBots
+) {
   const Name = playerName;
   if (Name.length >= 13) {
     throw new error("Name has to be lower than 12");
   }
 
-  for (var index = 0; index != AmountOfBots; index++) {
+  for (let index = 0; index != AmountOfBots; index++) {
     playerArray.push(Name + index);
   }
 
-  for (let index = 0; index < AmountOfBots; index++) {
-    let tempPlayerName = "";
-    tempPlayerName = playerArray[index];
-    await start(code, tempPlayerName, guessing);
-    await wait(2000);
-  }
+  // Start all the bots concurrently
+  await Promise.all(
+    playerArray.map((playerName, index) => start(code, playerName, guessing))
+  );
 };

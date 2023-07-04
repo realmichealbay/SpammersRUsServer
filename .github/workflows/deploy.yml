@@ -26,3 +26,5 @@ jobs:
           fuser -k 4000/tcp || true
           npm i
           cp -rf root/certs ./
+          docker build -t my-puppeteer-app .
+
