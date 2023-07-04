@@ -2,6 +2,8 @@ const puppeteer = require("puppeteer");
 const playerArray = [];
 const Guessing = true;
 
+
+process.setMaxListeners(500);
 process.on('exit', cleanupFunction);
 process.on('SIGINT', cleanupFunction);
 process.on('SIGTERM', cleanupFunction);
