@@ -1,5 +1,8 @@
 FROM ghcr.io/puppeteer/puppeteer:latest
 
+# Change user to root
+USER root
+
 # Change working directory
 WORKDIR /usr/src/app
 
@@ -11,6 +14,9 @@ RUN npm install
 
 # Copy all files
 COPY . .
+
+# Change back to pptruser
+USER pptruser
 
 # Expose the port the app runs in
 EXPOSE 4000
