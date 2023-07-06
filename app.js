@@ -32,8 +32,25 @@ app.post(
     });
 
     if (req.body.type === "Kahoot") {
-      kahoot.startKahoot(req.body.code, req.body.name, true , req.body.botAmt); // replace "PlayerName" and true with appropriate values
+      kahoot.startKahoot(req.body.code, req.body.name, true, req.body.botAmt); // replace "PlayerName" and true with appropriate values
     }
+  }
+);
+
+app.post(
+  "/Retrieve-Info",
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    console.log(req.body);
+    res.status(200).json({
+      message: "200 Data Received",
+      body: req.body,
+      response: 
+    });
+
   }
 );
 

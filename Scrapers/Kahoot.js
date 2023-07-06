@@ -2,20 +2,18 @@ const puppeteer = require("puppeteer");
 const playerArray = [];
 const Guessing = true;
 
-
 process.setMaxListeners(500);
-process.on('exit', cleanupFunction);
-process.on('SIGINT', cleanupFunction);
-process.on('SIGTERM', cleanupFunction);
+process.on("exit", cleanupFunction);
+process.on("SIGINT", cleanupFunction);
+process.on("SIGTERM", cleanupFunction);
 
-
-function cleanupFunction() {
+function cleanupFunction(browser) {
   // Close Puppeteer
   browser.close();
   // Remove listeners
-  process.removeListener('exit', cleanupFunction);
-  process.removeListener('SIGINT', cleanupFunction);
-  process.removeListener('SIGTERM', cleanupFunction);
+  process.removeListener("exit", cleanupFunction);
+  process.removeListener("SIGINT", cleanupFunction);
+  process.removeListener("SIGTERM", cleanupFunction);
 }
 //const TwoFA = true;
 
@@ -44,11 +42,15 @@ async function start(PIN, NAME, GUESS) {
   const page = await context.newPage();
   await page.setRequestInterception(true);
 
-  page.on("request", (request) => {
-    if (["font", "stylesheet"].includes(request.resourceType())) {
-      request.abort();
+  page.on("request", (req) => {
+    if (
+      req.resourceType() == "stylesheet" ||
+      req.resourceType() == "font" ||
+      req.resourceType() == "image"
+    ) {
+      req.abort();
     } else {
-      request.continue();
+      req.continue();
     }
   });
 
