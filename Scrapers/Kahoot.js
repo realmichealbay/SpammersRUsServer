@@ -9,11 +9,12 @@ process.on("SIGTERM", cleanupFunction);
 
 function cleanupFunction(browser) {
   // Close Puppeteer
-  browser.close();
+
   // Remove listeners
   process.removeListener("exit", cleanupFunction);
   process.removeListener("SIGINT", cleanupFunction);
-  process.removeListener("SIGTERM", cleanupFunction);
+  process.removeListener("SIGTERM", cleanupFunction);  
+  browser.close();
 }
 //const TwoFA = true;
 
