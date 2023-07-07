@@ -14,7 +14,9 @@ function cleanupFunction(browser) {
   process.removeListener("exit", cleanupFunction);
   process.removeListener("SIGINT", cleanupFunction);
   process.removeListener("SIGTERM", cleanupFunction);  
-  browser.close();
+  return async function close(){
+    await browser.close();
+  }
 }
 //const TwoFA = true;
 
@@ -28,7 +30,6 @@ function createCheckURL(page, browser) {
     if (current_url === "https://kahoot.it/ranking") {
       await browser.close();
       console.log("Closed");
-      process.exit(0);
     }
   };
 }
