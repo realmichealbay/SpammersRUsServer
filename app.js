@@ -34,6 +34,9 @@ app.post(
     if (req.body.type === "Kahoot") {
       kahoot.startKahoot(req.body.code, req.body.name, true, req.body.botAmt); // replace "PlayerName" and true with appropriate values
     }
+    if (req.body.type === "Gimkit") {
+      kahoot.startKahoot(req.body.code, req.body.name, true, req.body.botAmt); // replace "PlayerName" and true with appropriate values
+    }
   }
 );
 
